@@ -3,31 +3,96 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --custom-orange: #E9804A;
+  --custom-red: #D95358;
+  --custom-blue: #1FA0AC;
+  --custom-pink: #C2556B;
+  --custom-little-pink: #e6d2bd;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.cursor {
+  border-left: 2px solid rgb(171, 171, 89);
+}
+
+.my-cursor {
+  width: 2px !important;
+}
+
+.cursor-hover {
+  position: absolute;
+  top: -19px;
+  border-radius: 7px;
+  border-bottom-left-radius: 0;
+  padding: 0 5px;
+  z-index: 10000000000;
+}
+
+.textLayer,
+.annotationLayer {
+  display: none;
+}
+
+.react-pdf__Page__canvas {
+  width: 500px !important;
+  height: 620px !important;
+}
+
+.codeEditor * {
+  overflow: auto;
+}
+
+.yard * {
+  overflow: hidden;
+}
+
+@media screen and (max-width: 786px) {
+  .react-pdf__Page__canvas {
+    width: 100vw !important;
+    height: auto !important;
+  }
+
+}
+
+.loader {
+  border-top-color: #3490dc;
+  -webkit-animation: spin 1s linear infinite;
+  -moz-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@-moz-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+
+  100% {
+    -moz-transform: rotate(360deg);
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }

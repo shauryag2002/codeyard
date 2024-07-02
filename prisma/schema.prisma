@@ -1,0 +1,111 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x", "windows"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @unique
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  merged            User[]  @relation("MergedAccounts")
+  rejected          User[]  @relation("RejectedAccounts")
+  others            User[]  @relation("OtherAccounts")
+
+  @@unique([provider, providerAccountId])
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  username      String?
+  email         String?    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  age           Int?
+  gender        String?
+  bio           String?
+  resume        String?
+  YOE           Int?
+  location      String?
+  accounts      Account[]
+  sessions      Session[]
+  mergedUser    Account?   @relation("MergedAccounts", fields: [mergedId], references: [id])
+  mergedId      String?
+  rejectedUser  Account?   @relation("RejectedAccounts", fields: [rejectedId], references: [id])
+  rejectedId    String?
+  otherUser     Account?   @relation("OtherAccounts", fields: [otherId], references: [id])
+  otherId       String?
+  playAreas1    PlayArea[] @relation("User1")
+  playAreas2    PlayArea[] @relation("User2")
+  chats1        Chat[]     @relation("ChatUser1")
+  chats2        Chat[]     @relation("ChatUser2")
+  messages      Message[]
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model PlayArea {
+  id          String    @id @default(cuid())
+  user1Id     String
+  user2Id     String
+  meetingDate DateTime?
+  meetingTime String?
+  fixed       Boolean
+  user1       User      @relation("User1", fields: [user1Id], references: [id], onDelete: Cascade)
+  user2       User      @relation("User2", fields: [user2Id], references: [id], onDelete: Cascade)
+
+  @@unique([user1Id, user2Id, meetingDate])
+}
+
+model Chat {
+  id       String    @id @default(cuid())
+  user1Id  String
+  user2Id  String
+  user1    User      @relation("ChatUser1", fields: [user1Id], references: [id])
+  user2    User      @relation("ChatUser2", fields: [user2Id], references: [id])
+  messages Message[]
+
+  @@unique([user1Id, user2Id])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  chatId    String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([chatId])
+}
