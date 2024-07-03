@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SwipeCard from '../_components/SwipeCard'
 import SideBar from "../_components/SideBar";
 import { useRecoilState_TRANSITION_SUPPORT_UNSTABLE } from "recoil";
@@ -10,9 +10,11 @@ const Yard = () => {
     const { data: session } = useSession()
     const [open, setOpen] = useRecoilState_TRANSITION_SUPPORT_UNSTABLE(SideBarAtom)
     const router = useRouter()
-    if (!session || !session?.user.username) {
-        router.push("/register")
-    }
+    useEffect(() => {
+        if (!session || !session?.user.username) {
+            router.push("/register")
+        }
+    }, [session])
     const [peoples, setPeople] = useState([
     ]);
     return <div className=" overflow-hidden bg-[#e6d2bd]">

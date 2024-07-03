@@ -9,15 +9,18 @@ services:
       - POSTGRES_DB=codeyard
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
   nextjs-app:
     build: .
     ports:
       - "3000:3000"
+      - "80:3000"
+      - "8080:3000"
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/codeyard?schema=public
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 volumes:
   postgres_data:

@@ -53,6 +53,15 @@ const VideoCall: React.FC = () => {
 
         return () => {
             socket.off('connect');
+            if (localVideoRef.current && localVideoRef.current.srcObject) {
+                (localVideoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+            }
+            if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
+                (remoteVideoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+            }
+            if (peerInstance) {
+                peerInstance.destroy();
+            }
         };
     }, []);
 

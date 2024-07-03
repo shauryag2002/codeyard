@@ -29,7 +29,7 @@ const Chats: FunctionComponent = () => {
             else if (res.data.accounts[0]?.rejected && res.data.accounts[0].rejected.length !== 0) {
                 router.push('/chat/' + res.data.accounts[0].rejected[0].id)
             }
-            else {
+            else if (res.data.accounts[0]?.others && res.data.accounts[0].others.length !== 0) {
                 router.push('/chat/' + res.data.accounts[0].others[0].id)
             }
             if (res.data) {

@@ -45,7 +45,7 @@ const InfoSection = ({ name, email, password, image }: InfoSectionProps) => {
             }
             )
             toast(res2.data.message)
-
+            window.location.reload();
             router.push("/yard")
             return;
         }

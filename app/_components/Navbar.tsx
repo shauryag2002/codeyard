@@ -50,15 +50,20 @@ const Navbar = () => {
     const searchRef = React.useRef<HTMLDivElement | null>(null);
     const [isUsersOpen, setisUsersOpen] = useState(false);
     useEffect(() => {
-        if (search == '') return setUsers([])
-        const fetchUsers = async () => {
+        try {
+            if (search == '') return setUsers([])
+            const fetchUsers = async () => {
 
-            const res = await axios.post('/api/searchUsers', { search });
-            setUsers(res.data);
-            if (res.data.length > 0)
-                setisUsersOpen(true);
+                const res = await axios.post('/api/searchUsers', { search });
+                setUsers(res.data);
+                if (res.data.length > 0)
+                    setisUsersOpen(true);
+            }
+            fetchUsers();
         }
-        fetchUsers();
+        catch (e) {
+            console.log(e)
+        }
     }, [search])
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
